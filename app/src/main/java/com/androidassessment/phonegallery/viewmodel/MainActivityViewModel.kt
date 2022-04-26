@@ -27,8 +27,6 @@ class MainActivityViewModel : ViewModel() {
                 }else {
                     loadingState(LoadingState.Error)
                 }
-                exhibitList.removeAll(exhibitList)
-                exhibitList.add(Exhibit(title = "Error Occured", emptyArray()))
             }else{
                 exhibitList.removeAll(exhibitList)
                 exhibitList.addAll(list)

@@ -65,6 +65,7 @@ fun GalleryScreen(viewModel: MainActivityViewModel) {
             color = White,
             darkIcons = true
         )
+        loadingState = LoadingState.Loading
         viewModel.fetchExhibitListFromServer(
             context = context,
             loadingState = {
@@ -118,34 +119,39 @@ fun GalleryScreen(viewModel: MainActivityViewModel) {
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .padding(vertical = 10.dp, horizontal = 5.dp)) {
-                    items(viewModel.exhibitList.size) { index ->
-                        LazyRow(
-                            modifier = Modifier
-                                .padding(start = 10.dp, bottom = 10.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            when (loadingState) {
-                                LoadingState.Loading -> {
+                    when (loadingState) {
+                        LoadingState.Loading -> {
+                            items(3) { index ->
+                                LazyRow(
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, bottom = 10.dp)
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
                                     items(3) {
                                         GalleryCustomLoadingCard()
                                     }
                                 }
-                                LoadingState.Error -> {
-                                    item {
-                                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
-                                            ErrorOccurredView()
-                                        }
-                                    }
-                                }
-                                LoadingState.NoInternet -> {
-                                    item {
-                                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                                            NoInternetView()
-                                        }
-                                    }
-                                }
-                                LoadingState.Done -> {
+                            }
+                        }
+                        LoadingState.Error -> {
+                            item {
+                                ErrorOccurredView()
+                            }
+                        }
+                        LoadingState.NoInternet -> {
+                            item {
+                                NoInternetView()
+                            }
+                        }
+                        LoadingState.Done -> {
+                            items(viewModel.exhibitList.size) { index ->
+                                LazyRow(
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, bottom = 10.dp)
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
                                     val exhibitData = viewModel.exhibitList[index]
                                     items(exhibitData.images.size) { index ->
                                         GalleryCustomCard(title = exhibitData.title, imageUrl = exhibitData.images[index])
